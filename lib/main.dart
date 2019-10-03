@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import './pages/products_overview_page.dart';
 import './pages/product_detail_page.dart';
+import './pages/cart_page.dart';
 import './providers/products.dart';
 import './providers/cart.dart';
 
@@ -25,7 +26,8 @@ class ShopApp extends StatelessWidget {
         ),
         home: ProductsOverviewPage(),
         routes: {
-          ProductDetailPage.routeName: (ctx) => ProductDetailPage()
+          ProductDetailPage.routeName: (ctx) => ProductDetailPage(),
+          CartPage.routeName: (ctx) => CartPage()
         }
       )
     );

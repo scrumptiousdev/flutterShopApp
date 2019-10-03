@@ -1,44 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import './pages/products_overview_page.dart';
+import './pages/product_detail_page.dart';
+import './providers/products.dart';
 
 void main() => runApp(ShopApp());
 
 class ShopApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shop App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue
-      ),
-      home: MainPage(title: 'Shop App')
-    );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  MainPage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title)
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'This will be my shop app'
-            )
-          ]
-        )
+    return ChangeNotifierProvider(
+      builder: (ctx) => Products(),
+      child: MaterialApp(
+        title: 'Shop App',
+        theme: ThemeData(
+          primarySwatch: Colors.purple,
+          accentColor: Colors.deepOrange,
+          fontFamily: 'Lato'
+        ),
+        home: ProductsOverviewPage(),
+        routes: {
+          ProductDetailPage.routeName: (ctx) => ProductDetailPage()
+        }
       )
     );
   }

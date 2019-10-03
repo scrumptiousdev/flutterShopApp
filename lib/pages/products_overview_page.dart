@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/products_grid.dart';
+import '../widgets/badge.dart';
+import '../providers/cart.dart';
 
 enum FilterOptions {
   Favorites,
@@ -38,6 +41,16 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
                 _showOnlyFavorites = selectedValue == FilterOptions.Favorites ? true : false;
               });
             }
+          ),
+          Consumer<Cart>(
+            builder: (_, cart, child) => Badge(
+              value: cart.itemCount.toString(),
+              child: child
+            ),
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {}
+            )
           )
         ]
       ),

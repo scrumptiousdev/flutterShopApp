@@ -10,6 +10,10 @@ import '../widgets/app_drawer.dart';
 class UserProductsPage extends StatelessWidget {
   static const routeName = '/user-products';
 
+  Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<Products>(context).fetchAndSetProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final products = Provider.of<Products>(context).items;
@@ -24,21 +28,24 @@ class UserProductsPage extends StatelessWidget {
           )
         ]
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (_, i) => Column(
-            children: <Widget>[
-              UserProductItem(
-                products[i].id,
-                products[i].title,
-                products[i].imageUrl
-              ),
-              if (i < products.length - 1) Divider()
-            ]
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (_, i) => Column(
+              children: <Widget>[
+                UserProductItem(
+                  products[i].id,
+                  products[i].title,
+                  products[i].imageUrl
+                ),
+                if (i < products.length - 1) Divider()
+              ]
+            )
           )
-        )
+        ),
       ),
       drawer: AppDrawer()
     );

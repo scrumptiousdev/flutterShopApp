@@ -18,7 +18,13 @@ class _EditProductPageState extends State<EditProductPage> {
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
   var _formOnceSubmitted = false;
-  var _editedProduct = Product(id: null, title: '', price: 0, description: '', imageUrl: '');
+  var _editedProduct = Product(
+    id: null,
+    title: '',
+    price: 0,
+    description: '',
+    imageUrl: ''
+  );
 
   @override
   void initState() {

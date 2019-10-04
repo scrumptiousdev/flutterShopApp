@@ -15,6 +15,7 @@ class _EditProductPageState extends State<EditProductPage> {
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
+  var _formOnceSubmitted = false;
   var _editedProduct = Product(id: null, title: '', price: 0, description: '', imageUrl: '');
 
   @override
@@ -34,10 +35,19 @@ class _EditProductPageState extends State<EditProductPage> {
   }
 
   void _updateImageUrl() {
-    if (!_imageUrlFocusNode.hasFocus) setState(() {});
+    if (!_imageUrlFocusNode.hasFocus) {
+      if (!_imageUrlController.text.startsWith('http') || !_imageUrlController.text.startsWith('https')) return;
+      if (!_imageUrlController.text.endsWith('.png') && !_imageUrlController.text.endsWith('.jpg') && !_imageUrlController.text.endsWith('.jpeg')) return;
+      setState(() {});
+    }
   }
 
   void _saveForm() {
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      setState(() => _formOnceSubmitted = true);
+      return;
+    }
     _form.currentState.save();
   }
 
@@ -57,12 +67,17 @@ class _EditProductPageState extends State<EditProductPage> {
         padding: const EdgeInsets.all(15),
         child: Form(
           key: _form,
+          autovalidate: _formOnceSubmitted,
           child: ListView(
             children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Title'
                 ),
+                validator: (value) {
+                  if (value.isEmpty) return 'Please provide a title.';
+                  return null;
+                },
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_priceFocusNode),
                 onSaved: (value) => _editedProduct = Product(
@@ -77,6 +92,12 @@ class _EditProductPageState extends State<EditProductPage> {
                 decoration: InputDecoration(
                   labelText: 'Price'
                 ),
+                validator: (value) {
+                  if (value.isEmpty) return 'Please provide a price.';
+                  if (double.tryParse(value) == null) return 'Please provide a valid price.';
+                  if (double.parse(value) < 0) return 'Please provide a valid price';
+                  return null;
+                },
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
                 focusNode: _priceFocusNode,
@@ -93,6 +114,11 @@ class _EditProductPageState extends State<EditProductPage> {
                 decoration: InputDecoration(
                   labelText: 'Description'
                 ),
+                validator: (value) {
+                  if (value.isEmpty) return 'Please provide a description.';
+                  if (value.length < 10) return 'Please provide at least 10 characters long description.';
+                  return null;
+                },
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descFocusNode,
@@ -130,6 +156,12 @@ class _EditProductPageState extends State<EditProductPage> {
                       decoration: InputDecoration(
                         labelText: 'Image URL'
                       ),
+                      validator: (value) {
+                        if (value.isEmpty) return 'Please provide a image URL.';
+                        if (!value.startsWith('http') || !value.startsWith('https')) return 'Please provide a valid URL.';
+                        if (!value.endsWith('.png') && !value.endsWith('.jpg') && !value.endsWith('.jpeg')) return 'Please provide a valid URL.';
+                        return null;
+                      },
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                       controller: _imageUrlController,

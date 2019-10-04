@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../providers/product.dart';
+
 class EditProductPage extends StatefulWidget {
   static const routeName = '/edit-product';
 
@@ -12,6 +14,8 @@ class _EditProductPageState extends State<EditProductPage> {
   final _descFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
+  final _form = GlobalKey<FormState>();
+  var _editedProduct = Product(id: null, title: '', price: 0, description: '', imageUrl: '');
 
   @override
   void initState() {
@@ -33,15 +37,26 @@ class _EditProductPageState extends State<EditProductPage> {
     if (!_imageUrlFocusNode.hasFocus) setState(() {});
   }
 
+  void _saveForm() {
+    _form.currentState.save();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Product')
+        title: Text('Edit Product'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: _saveForm
+          )
+        ]
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: Form(
+          key: _form,
           child: ListView(
             children: <Widget>[
               TextFormField(
@@ -49,7 +64,14 @@ class _EditProductPageState extends State<EditProductPage> {
                   labelText: 'Title'
                 ),
                 textInputAction: TextInputAction.next,
-                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_priceFocusNode)
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_priceFocusNode),
+                onSaved: (value) => _editedProduct = Product(
+                  title: value,
+                  price: _editedProduct.price,
+                  description: _editedProduct.description,
+                  imageUrl: _editedProduct.imageUrl,
+                  id: null
+                )
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -58,7 +80,14 @@ class _EditProductPageState extends State<EditProductPage> {
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
                 focusNode: _priceFocusNode,
-                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_descFocusNode)
+                onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_descFocusNode),
+                onSaved: (value) => _editedProduct = Product(
+                  title: _editedProduct.title,
+                  price: double.parse(value),
+                  description: _editedProduct.description,
+                  imageUrl: _editedProduct.imageUrl,
+                  id: null
+                )
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -66,7 +95,14 @@ class _EditProductPageState extends State<EditProductPage> {
                 ),
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
-                focusNode: _descFocusNode
+                focusNode: _descFocusNode,
+                onSaved: (value) => _editedProduct = Product(
+                  title: _editedProduct.title,
+                  price: _editedProduct.price,
+                  description: value,
+                  imageUrl: _editedProduct.imageUrl,
+                  id: null
+                )
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -97,14 +133,22 @@ class _EditProductPageState extends State<EditProductPage> {
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                       controller: _imageUrlController,
-                      focusNode: _imageUrlFocusNode
+                      focusNode: _imageUrlFocusNode,
+                      onFieldSubmitted: (_) => _saveForm(),
+                      onSaved: (value) => _editedProduct = Product(
+                        title: _editedProduct.title,
+                        price: _editedProduct.price,
+                        description: _editedProduct.description,
+                        imageUrl: value,
+                        id: null
+                      )
                     )
                   )
                 ]
               )
             ]
           )
-        ),
+        )
       )
     );
   }

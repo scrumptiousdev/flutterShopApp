@@ -6,6 +6,7 @@ import './pages/product_detail_page.dart';
 import './pages/cart_page.dart';
 import './pages/orders_page.dart';
 import './pages/user_products_page.dart';
+import './pages/edit_product_page.dart';
 import './providers/products.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
@@ -33,7 +34,8 @@ class ShopApp extends StatelessWidget {
           ProductDetailPage.routeName: (ctx) => ProductDetailPage(),
           CartPage.routeName: (ctx) => CartPage(),
           OrdersPage.routeName: (ctx) => OrdersPage(),
-          UserProductsPage.routeName: (ctx) => UserProductsPage()
+          UserProductsPage.routeName: (ctx) => UserProductsPage(),
+          EditProductPage.routeName: (ctx) => EditProductPage()
         }
       )
     );

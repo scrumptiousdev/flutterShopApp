@@ -8,6 +8,7 @@ import './pages/cart_page.dart';
 import './pages/orders_page.dart';
 import './pages/user_products_page.dart';
 import './pages/edit_product_page.dart';
+import './providers/auth.dart';
 import './providers/products.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
@@ -19,6 +20,7 @@ class ShopApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider (
       providers: [
+        ChangeNotifierProvider.value(value: Auth()),
         ChangeNotifierProvider.value(value: Products()),
         ChangeNotifierProvider.value(value: Cart()),
         ChangeNotifierProvider.value(value: Orders())

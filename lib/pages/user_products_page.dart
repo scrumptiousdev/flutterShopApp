@@ -11,13 +11,11 @@ class UserProductsPage extends StatelessWidget {
   static const routeName = '/user-products';
 
   Future<void> _refreshProducts(BuildContext context) async {
-    await Provider.of<Products>(context).fetchAndSetProducts();
+    await Provider.of<Products>(context, listen: false).fetchAndSetProducts(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<Products>(context).items;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Products'),
@@ -28,24 +26,31 @@ class UserProductsPage extends StatelessWidget {
           )
         ]
       ),
-      body: RefreshIndicator(
-        onRefresh: () => _refreshProducts(context),
-        child: Padding(
-          padding: EdgeInsets.all(8),
-          child: ListView.builder(
-            itemCount: products.length,
-            itemBuilder: (_, i) => Column(
-              children: <Widget>[
-                UserProductItem(
-                  products[i].id,
-                  products[i].title,
-                  products[i].imageUrl
-                ),
-                if (i < products.length - 1) Divider()
-              ]
+      body: FutureBuilder(
+        future: _refreshProducts(context),
+        builder: (ctx, snapshot) => snapshot.connectionState == ConnectionState.waiting ? Center(
+          child: CircularProgressIndicator()
+        ) : RefreshIndicator(
+          onRefresh: () => _refreshProducts(context),
+          child: Consumer<Products>(
+            builder: (ctx, productsData, _) => Padding(
+              padding: EdgeInsets.all(8),
+              child: ListView.builder(
+                itemCount: productsData.items.length,
+                itemBuilder: (_, i) => Column(
+                  children: <Widget>[
+                    UserProductItem(
+                      productsData.items[i].id,
+                      productsData.items[i].title,
+                      productsData.items[i].imageUrl
+                    ),
+                    if (i < productsData.items.length - 1) Divider()
+                  ]
+                )
+              )
             )
           )
-        ),
+        )
       ),
       drawer: AppDrawer()
     );

@@ -8,6 +8,7 @@ import './pages/cart_page.dart';
 import './pages/orders_page.dart';
 import './pages/user_products_page.dart';
 import './pages/edit_product_page.dart';
+import './pages/splash_page.dart';
 import './providers/auth.dart';
 import './providers/products.dart';
 import './providers/cart.dart';
@@ -41,7 +42,10 @@ class ShopApp extends StatelessWidget {
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato'
           ),
-          home: auth.isAuth ? ProductsOverviewPage() : AuthPage(),
+          home: auth.isAuth ? ProductsOverviewPage() : FutureBuilder(
+            future: auth.tryAutoLogin(),
+            builder: (ctx, authSnapshot) => authSnapshot.connectionState == ConnectionState.waiting ? SplashPage() : AuthPage()
+          ),
           routes: {
             ProductDetailPage.routeName: (ctx) => ProductDetailPage(),
             CartPage.routeName: (ctx) => CartPage(),

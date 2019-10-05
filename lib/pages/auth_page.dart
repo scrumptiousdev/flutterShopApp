@@ -97,7 +97,10 @@ class _AuthCardState extends State<AuthCard> {
     _formKey.currentState.save();
     setState(() => _isLoading = true);
     if (_authMode == AuthMode.Login) {
-
+      await Provider.of<Auth>(context, listen: false).login(
+        _authData['email'],
+        _authData['password']
+      );
     } else {
       await Provider.of<Auth>(context, listen: false).signup(
         _authData['email'],

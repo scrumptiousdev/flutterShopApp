@@ -8,6 +8,10 @@ import './product.dart';
 class Products with ChangeNotifier {
   List<Product> _items = [];
 
+  final String authToken;
+
+  Products(this.authToken, this._items);
+
   List<Product> get items {
     return [..._items];
   }
@@ -22,7 +26,7 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProducts() async {
     try {
-      final response = await http.get('https://flutter-shop-app-8017a.firebaseio.com/products.json');
+      final response = await http.get('https://flutter-shop-app-8017a.firebaseio.com/products.json?auth=$authToken');
       final data = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
       if (data == null) return;
@@ -45,7 +49,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     try {
-      final response = await http.post('https://flutter-shop-app-8017a.firebaseio.com/products.json',
+      final response = await http.post('https://flutter-shop-app-8017a.firebaseio.com/products.json?auth=$authToken',
         body: json.encode({
           'title': product.title,
           'description': product.description,
@@ -71,7 +75,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      await http.patch('https://flutter-shop-app-8017a.firebaseio.com/products/$id.json',
+      await http.patch('https://flutter-shop-app-8017a.firebaseio.com/products/$id.json?auth=$authToken',
         body: json.encode({
           'title': newProduct.title,
           'description': newProduct.description,
@@ -91,7 +95,7 @@ class Products with ChangeNotifier {
     _items.removeAt(existingProductIndex);
     notifyListeners();
     
-    final response = await http.delete('https://flutter-shop-app-8017a.firebaseio.com/products/$id.json');
+    final response = await http.delete('https://flutter-shop-app-8017a.firebaseio.com/products/$id.json?auth=$authToken');
 
     if (response.statusCode >= 400) {
       _items.insert(existingProductIndex, existingProduct);

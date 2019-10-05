@@ -25,6 +25,7 @@ class Products with ChangeNotifier {
       final response = await http.get('https://flutter-shop-app-8017a.firebaseio.com/products.json');
       final data = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
+      if (data == null) return;
       data.forEach((prodId, prodData) {
         loadedProducts.add(Product(
           id: prodId,
@@ -53,7 +54,6 @@ class Products with ChangeNotifier {
           'isFavorite': product.isFavorite
         })
       );
-
       final newProduct = Product(
         title: product.title,
         description: product.description,

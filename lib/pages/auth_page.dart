@@ -43,7 +43,6 @@ class AuthPage extends StatelessWidget {
                 children: <Widget>[
                   Flexible(
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 20),
                       padding: EdgeInsets.symmetric(
                         vertical: 8,
                         horizontal: 94
@@ -52,7 +51,7 @@ class AuthPage extends StatelessWidget {
                       child: Text(
                         'Cat Shop',
                         style: TextStyle(
-                          color: Theme.of(context).accentTextTheme.title.color,
+                          color: Theme.of(context).primaryColor,
                           fontSize: 50,
                           fontFamily: 'Anton',
                           fontWeight: FontWeight.normal

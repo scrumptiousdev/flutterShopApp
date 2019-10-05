@@ -25,21 +25,23 @@ class ShopApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: Cart()),
         ChangeNotifierProvider.value(value: Orders())
       ],
-      child: MaterialApp(
-        title: 'Shop App',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato'
-        ),
-        home: AuthPage(),
-        routes: {
-          ProductDetailPage.routeName: (ctx) => ProductDetailPage(),
-          CartPage.routeName: (ctx) => CartPage(),
-          OrdersPage.routeName: (ctx) => OrdersPage(),
-          UserProductsPage.routeName: (ctx) => UserProductsPage(),
-          EditProductPage.routeName: (ctx) => EditProductPage()
-        }
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+          title: 'Shop App',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato'
+          ),
+          home: auth.isAuth ? ProductsOverviewPage() : AuthPage(),
+          routes: {
+            ProductDetailPage.routeName: (ctx) => ProductDetailPage(),
+            CartPage.routeName: (ctx) => CartPage(),
+            OrdersPage.routeName: (ctx) => OrdersPage(),
+            UserProductsPage.routeName: (ctx) => UserProductsPage(),
+            EditProductPage.routeName: (ctx) => EditProductPage()
+          }
+        )
       )
     );
   }

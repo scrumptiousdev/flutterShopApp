@@ -41,7 +41,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
-        title: const Text('Shop'),
+        title: const Text('Cat Shop'),
         actions: <Widget>[
           PopupMenuButton(
             icon: Icon(Icons.more_vert),

@@ -24,7 +24,7 @@ class ShopApp extends StatelessWidget {
           value: Auth()
         ),
         ChangeNotifierProxyProvider<Auth, Products>(
-          builder: (ctx, auth, previousProducts) => Products(auth.token, previousProducts == null ? [] : previousProducts.items)
+          builder: (ctx, auth, previousProducts) => Products(auth.token, auth.userId, previousProducts == null ? [] : previousProducts.items)
         ),
         ChangeNotifierProvider.value(
           value: Cart()
@@ -35,7 +35,7 @@ class ShopApp extends StatelessWidget {
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
-          title: 'Shop App',
+          title: 'Cat Shop',
           theme: ThemeData(
             primarySwatch: Colors.purple,
             accentColor: Colors.deepOrange,

@@ -13,6 +13,7 @@ import './providers/auth.dart';
 import './providers/products.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
+import './helpers/custom_route.dart';
 
 void main() => runApp(ShopApp());
 
@@ -40,7 +41,13 @@ class ShopApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.purple,
             accentColor: Colors.deepOrange,
-            fontFamily: 'Lato'
+            fontFamily: 'Lato',
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CustomPageTransitionBuilder(),
+                TargetPlatform.iOS: CustomPageTransitionBuilder()
+              }
+            )
           ),
           home: auth.isAuth ? ProductsOverviewPage() : FutureBuilder(
             future: auth.tryAutoLogin(),

@@ -1,4 +1,4 @@
-package com.example.flutter_shop_app
+package dev.scrumptiousdev.cat_shop
 
 import android.os.Bundle
 
